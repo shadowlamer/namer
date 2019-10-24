@@ -15,5 +15,5 @@ Where "parameters" can be:
 #### Examples
 ```
     npm start -- послать запрос   
-    npm start -- -c all -d _  Моя потрясяющая константа 
+    npm start -- -c all -d _ Hằng số tuyệt vời của tôi 
 ```
