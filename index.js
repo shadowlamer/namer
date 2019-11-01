@@ -2,7 +2,9 @@ const translate = require('@vitalets/google-translate-api');
 const argv = require('minimist')(process.argv.slice(2));
 
 const DEFAULT_DELIMITER = '';
-const DEFAULT_CAPITALIZATION = 'first';
+const DEFAULT_CAPITALIZATION = 'preserve';
+const DEFAULT_CASE_FIRST = 'preserve';
+const DEFAULT_LANG_CODE = 'en';
 
 if (argv['_'].length === 0) {
     showHelp();
@@ -10,23 +12,36 @@ if (argv['_'].length === 0) {
     const text = argv['_'].join(' ');
     const delimiter = argv['d'] ? argv['d'] : DEFAULT_DELIMITER;
     const capitalization = argv['c'] ? argv['c'].toLowerCase() : DEFAULT_CAPITALIZATION;
+    const caseFirst = argv['f'] ? argv['f'].toLowerCase() : DEFAULT_CASE_FIRST;
+    const langCode = argv['l'] ? argv['l'].toLowerCase() : DEFAULT_LANG_CODE;
 
-    translate(text, {to: 'en'}).then(res => {
+    translate(text, {to: langCode}).then(res => {
         const result = res.text;
         const words = result.split(' ');
-        const name = words.map(word => {
+        let name = words.map(word => {
             switch (capitalization) {
-                case "first":
+                case 'first':
                     return word[0].toUpperCase() + word.slice(1).toLowerCase();
-                case "none":
+                case 'none':
                     return word.toLowerCase();
-                case "all":
+                case 'all':
                     return word.toUpperCase();
-                case "preserve":
+                case DEFAULT_CAPITALIZATION:
                 default:
                     return word;
             }
         }).join(delimiter);
+        switch (caseFirst) {
+            case 'upper':
+                name = name[0].toUpperCase() + name.slice(1);
+                break;
+            case 'lower':
+                name = name[0].toLowerCase() + name.slice(1);
+                break;
+            case DEFAULT_CASE_FIRST:
+            default:
+                break;
+        }
         console.log(name);
     }).catch(err => {
         console.error(err);
