@@ -1,5 +1,6 @@
 const translate = require('@vitalets/google-translate-api');
 const argv = require('minimist')(process.argv.slice(2));
+const preset = require('./preset');
 
 const DEFAULT_DELIMITER = '';
 const DEFAULT_CAPITALIZATION = 'preserve';
@@ -10,10 +11,11 @@ if (argv['_'].length === 0) {
     showHelp();
 } else {
     const text = argv['_'].join(' ');
-    const delimiter = argv['d'] ? argv['d'] : DEFAULT_DELIMITER;
-    const capitalization = argv['c'] ? argv['c'].toLowerCase() : DEFAULT_CAPITALIZATION;
-    const caseFirst = argv['f'] ? argv['f'].toLowerCase() : DEFAULT_CASE_FIRST;
-    const langCode = argv['l'] ? argv['l'].toLowerCase() : DEFAULT_LANG_CODE;
+    const selectedPreset = preset[argv['p']] || {};
+    const delimiter = argv['d']  || selectedPreset.delimiter || DEFAULT_DELIMITER;
+    const capitalization = argv['c'] || selectedPreset.capitalization || DEFAULT_CAPITALIZATION;
+    const caseFirst = argv['f'] || selectedPreset.caseFirst || DEFAULT_CASE_FIRST;
+    const langCode = argv['l'] || DEFAULT_LANG_CODE;
 
     translate(text, {to: langCode}).then(res => {
         const result = res.text;
@@ -50,17 +52,24 @@ if (argv['_'].length === 0) {
 
 function showHelp() {
     console.log(
-`Variable names generator.
+        `Variable names generator.
 Usage:
     npm install 
     npm start -- [parameters] <short variable description>
 
 Where "parameters" can be:
     -c    Capitalization ("first", "all", "none", "preserve")
+    -f    Case of first letter ("upper", "lower", "preserve")
+    -l    Translate to specified language (two letters code, 'en' by default)
     -d    Delimiter
+    -p    Preset. Parameters override preset.
     
 Examples:
     npm start -- послать запрос   
-    npm start -- -c all -d _  Моя потрясяющая константа 
-`);
+    npm start -- -c all -d _  Hằng số tuyệt vời của tôi 
+    
+Available presets:`);
+    Object.entries(preset).forEach(p => {
+        console.log(p[0]+':', p[1]);
+    });
 }
