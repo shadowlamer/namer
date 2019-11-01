@@ -1,6 +1,6 @@
 {
   "name": "namer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Makes variable names",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,7 @@
   },
   "author": "Vadim Cherenev <sl@anhot.ru>",
   "license": "UNLICENSED",
+  "repository": "https://github.com/shadowlamer/namer",
   "dependencies": {
     "@vitalets/google-translate-api": "^3.0.0",
     "install": "^0.13.0",

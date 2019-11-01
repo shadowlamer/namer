@@ -15,6 +15,8 @@ if (argv['_'].length === 0) {
     const delimiter = argv['d']  || selectedPreset.delimiter || DEFAULT_DELIMITER;
     const capitalization = argv['c'] || selectedPreset.capitalization || DEFAULT_CAPITALIZATION;
     const caseFirst = argv['f'] || selectedPreset.caseFirst || DEFAULT_CASE_FIRST;
+    const prefix = argv['b'] || selectedPreset.prefix || '';
+    const postfix = argv['a'] || selectedPreset.postfix || '';
     const langCode = argv['l'] || DEFAULT_LANG_CODE;
 
     translate(text, {to: langCode}).then(res => {
@@ -44,7 +46,7 @@ if (argv['_'].length === 0) {
             default:
                 break;
         }
-        console.log(name);
+        console.log(prefix + name + postfix);
     }).catch(err => {
         console.error(err);
     });
@@ -58,18 +60,19 @@ Usage:
     npm start -- [parameters] <short variable description>
 
 Where "parameters" can be:
-    -c    Capitalization ("first", "all", "none", "preserve")
-    -f    Case of first letter ("upper", "lower", "preserve")
-    -l    Translate to specified language (two letters code, 'en' by default)
-    -d    Delimiter
-    -p    Preset. Parameters override preset.
+    -c    Capitalization ("first", "all", "none", "preserve");
+    -f    Case of first letter ("upper", "lower", "preserve");
+    -l    Translate to specified language (two letters code, 'en' by default);
+    -d    Delimiter;
+    -p    Preset. Parameters override preset;
+    -b    Prefix;
+    -a    Postfix;
     
 Examples:
     npm start -- послать запрос   
     npm start -- -c all -d _  Hằng số tuyệt vời của tôi 
     
-Available presets:`);
-    Object.entries(preset).forEach(p => {
-        console.log(p[0]+':', p[1]);
-    });
+Available presets:
+    ${Object.entries(preset).map(p=>p[0]).join(', ')}
+`);
 }
