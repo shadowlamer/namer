@@ -7,10 +7,15 @@
 ```
 
 Where "parameters" can be:
-
-    -c    Capitalization ("first", "all", "none", "preserve")
-    
-    -d    Delimiter
+```
+    -c    Capitalization ("first", "all", "none", "preserve");
+    -f    Case of first letter ("upper", "lower", "preserve");
+    -l    Translate to specified language (two letters code, 'en' by default);
+    -d    Delimiter;
+    -p    Preset. Parameters override preset;
+    -b    Prefix;
+    -a    Postfix;
+```
     
 #### Examples
 ```
