@@ -8,7 +8,6 @@ if (argv['_'].length === 0) {
     showHelp();
 } else {
     const text = argv['_'].join(' ');
-    const selectedPreset = preset[argv['p']] || {};
     const delimiter = getParam('d', 'delimiter');
     const capitalization = getParam('c', 'capitalization');
     const caseFirst = getParam('f', 'caseFirst');
@@ -19,32 +18,35 @@ if (argv['_'].length === 0) {
     translate(text, {to: langCode}).then(res => {
         const result = res.text;
         const words = result.split(' ');
-        let name = words.map(word => {
-            switch (capitalization) {
-                case 'first':
-                    return word[0].toUpperCase() + word.slice(1).toLowerCase();
-                case 'none':
-                    return word.toLowerCase();
-                case 'all':
-                    return word.toUpperCase();
-                default:
-                    return word;
-            }
-        }).join(delimiter);
-        switch (caseFirst) {
-            case 'upper':
-                name = name[0].toUpperCase() + name.slice(1);
-                break;
-            case 'lower':
-                name = name[0].toLowerCase() + name.slice(1);
-                break;
-            default:
-                break;
-        }
+        let name = formatResult(words.map(word => formatWord(word, capitalization)).join(delimiter), caseFirst);
         console.log(prefix + name + postfix);
     }).catch(err => {
         console.error(err);
     });
+}
+
+function formatWord(word, capitalization) {
+    switch (capitalization) {
+        case 'first':
+            return word[0].toUpperCase() + word.slice(1).toLowerCase();
+        case 'none':
+            return word.toLowerCase();
+        case 'all':
+            return word.toUpperCase();
+        default:
+            return word;
+    }
+}
+
+function formatResult(name, caseFirst) {
+    switch (caseFirst) {
+        case 'upper':
+            return name[0].toUpperCase() + name.slice(1);
+        case 'lower':
+            return name[0].toLowerCase() + name.slice(1);
+        default:
+            return name;
+    }
 }
 
 function showHelp() {
