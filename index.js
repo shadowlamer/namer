@@ -2,9 +2,6 @@ const translate = require('@vitalets/google-translate-api');
 const argv = require('minimist')(process.argv.slice(2));
 const preset = require('./preset');
 
-const DEFAULT_DELIMITER = '';
-const DEFAULT_CAPITALIZATION = 'preserve';
-const DEFAULT_CASE_FIRST = 'preserve';
 const DEFAULT_LANG_CODE = 'en';
 
 if (argv['_'].length === 0) {
@@ -12,11 +9,11 @@ if (argv['_'].length === 0) {
 } else {
     const text = argv['_'].join(' ');
     const selectedPreset = preset[argv['p']] || {};
-    const delimiter = argv['d']  || selectedPreset.delimiter || DEFAULT_DELIMITER;
-    const capitalization = argv['c'] || selectedPreset.capitalization || DEFAULT_CAPITALIZATION;
-    const caseFirst = argv['f'] || selectedPreset.caseFirst || DEFAULT_CASE_FIRST;
-    const prefix = argv['b'] || selectedPreset.prefix || '';
-    const postfix = argv['a'] || selectedPreset.postfix || '';
+    const delimiter = getParam('d', 'delimiter');
+    const capitalization = getParam('c', 'capitalization');
+    const caseFirst = getParam('f', 'caseFirst');
+    const prefix = getParam('b', 'prefix');
+    const postfix = getParam('a', 'postfix');
     const langCode = argv['l'] || DEFAULT_LANG_CODE;
 
     translate(text, {to: langCode}).then(res => {
@@ -30,7 +27,6 @@ if (argv['_'].length === 0) {
                     return word.toLowerCase();
                 case 'all':
                     return word.toUpperCase();
-                case DEFAULT_CAPITALIZATION:
                 default:
                     return word;
             }
@@ -42,7 +38,6 @@ if (argv['_'].length === 0) {
             case 'lower':
                 name = name[0].toLowerCase() + name.slice(1);
                 break;
-            case DEFAULT_CASE_FIRST:
             default:
                 break;
         }
@@ -75,4 +70,10 @@ Examples:
 Available presets:
     ${Object.entries(preset).map(p=>p[0]).join(', ')}
 `);
+}
+
+function getParam(short, long) {
+    const selectedPreset = preset[argv['p']] || {};
+    const defaultPreset = preset['default'];
+    return  argv[short]  || selectedPreset[long] || defaultPreset[long];
 }

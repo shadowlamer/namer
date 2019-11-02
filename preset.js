@@ -1,4 +1,11 @@
 const preset = {
+    default: {
+        capitalization: 'preserve',
+        delimiter: '',
+        caseFirst: 'preserve',
+        prefix: '',
+        postfix: ''
+    },
     java_method: {
         capitalization: 'first',
         delimiter: '',
