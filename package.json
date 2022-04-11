@@ -12,6 +12,6 @@
   "repository": "https://github.com/shadowlamer/namer",
   "dependencies": {
     "@vitalets/google-translate-api": "^7.0.0",
-    "minimist": "^1.2.3"
+    "minimist": "^1.2.6"
   }
 }
